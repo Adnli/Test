@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-12 mx-auto">
+
+            <nav class="nav">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                    ADD PROJECT
+                </button>
+            </nav>
+            <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <label>Project name:</label>
+                            </div>
+                            <div>
+                                <input type="text" class="form-control" name="project_name" id="project_name">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" th:onclick="'addProject()'"
+                                    data-bs-dismiss="modal">Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" width="5%">ID</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">START</th>
+                    <th scope="col">FINISH</th>
+                    <th scope="col">PRIORITY</th>
+                    <th scope="col">STATUS</th>
+                    <th scope="col" width="10%">DETAILS</th>
+                </tr>
+                </thead>
+                <tbody id="projects">
+
+                </tbody>
+            </table>
+            <script type="text/javascript">
+                function getProjects() {
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onload = function () {
+                        let result = this.responseText;
+                        let projectList = JSON.parse(result);
+                        let htmlCode = "";
+                        for (let i = 0; i < projectList.length; i++) {
+                            htmlCode += "<tr>";
+                            htmlCode += "<th scope='row'>" + projectList[i].id + "</th>";
+                            htmlCode += "<td scope='row'>" + projectList[i].name + "</td>";
+                            if (projectList[i].startDate == null) {
+                                htmlCode += "<td scope='row'>" + '-' + "</td>";
+                            } else {
+                                htmlCode += "<td scope='row'>" + projectList[i].startDate + "</td>";
+                            }
+                            if (projectList[i].finishDate == null) {
+                                htmlCode += "<td scope='row'>" + '-' + "</td>";
+                            } else {
+                                htmlCode += "<td scope='row'>" + projectList[i].finishDate + "</td>";
+                            }
+                            htmlCode += "<td scope='row'>" + projectList[i].priority + "</td>";
+                            htmlCode += "<td scope='row'>" + projectList[i].status + "</td>";
+                            htmlCode += "<td scope='row'>" + "<a class='btn btn-secondary btn-sm' href='/projectdetails/" + projectList[i].id + "'>DETAILS</a>" + "</td>"
+                            htmlCode += "</tr>";
+                        }
+                        document.getElementById("projects").innerHTML = htmlCode;
+                    }
+                    xhttp.open("GET", "http://localhost:8080/api/allprojects")
+                    xhttp.send();
+                }
+                window.onload = getProjects();
+            </script>
+            <script type="text/javascript">
+                function addProject() {
+                    let xhttp = new XMLHttpRequest();
+                    let projectName = document.getElementById("project_name")
+                    xhttp.onload = function () {
+                        getProjects();
+                    }
+                    xhttp.open("POST", "http://localhost:8080/api/addproject");
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                    xhttp.send("projectName=" + projectName.value);
+                }
+            </script>
+        </div>
+    </div>
+</div>
+</html>

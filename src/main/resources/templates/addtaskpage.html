@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <form th:action="@{'/addtask'}" method="post">
+                <input type="hidden" th:value="${project.id}" name="project_id">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>TASK NAME:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="text" name="task_name" class="form-control" placeholder="Insert task's name">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>DESCRIPTION:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <textarea type="text" name="task_description" class="form-control" rows="4"
+                                  placeholder="Insert task's description"></textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>STATUS:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <select class="form-select" name="task_status">
+                            <option>
+                                ToDo
+                            </option>
+                            <option>
+                                InProgress
+                            </option>
+                            <option>
+                                Done
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>PRIORITY:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <select class="form-select" name="task_priority">
+                            <option th:value="3">
+                                Low
+                            </option>
+                            <option th:value="2">
+                                Medium
+                            </option>
+                            <option th:value="1">
+                                High
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <a class="btn btn-secondary mt-3" th:href="@{'/projectdetails/'+${project.id}}">BACK</a>
+                <button class="btn btn-success mt-3">ADD TASK</button>
+            </form>
+        </div>
+    </div>
+</div>
+</html>
