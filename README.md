@@ -1,1 +1,1 @@
-Project using Postgre SQL. create new DB and change url in application properties
+Project using Postgre SQL. Create new DB and change url in application properties
